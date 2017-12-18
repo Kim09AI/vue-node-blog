@@ -1,0 +1,12 @@
+.clearfix
+    zoom: 1
+    &:after
+        content: ''
+        line-height: 0
+        display: block
+        clear: both
+
+.slide-out-leave-active
+    transition all 0.3s
+.slide-out-leave-to
+    transform translateX(100%)

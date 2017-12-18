@@ -1,0 +1,70 @@
+<template>
+    <div id="app" @click.capture="shouldCheckLoigin">
+        <div>
+            <router-view name="header" />
+            <keep-alive>
+                <router-view/>
+            </keep-alive>
+            <router-view name="footer" />
+            <form-popup v-if="!isLogin && showSignPopup" :type="signType"></form-popup>
+        </div>
+    </div>
+</template>
+
+<script>
+    import {mapGetters, mapMutations, mapActions} from 'vuex'
+    import formPopup from './components/formPopup/formPopup.vue'
+    import {getUserInfo} from './api/user'
+    import {ERR_OK} from './common/js/util'
+
+    export default {
+        name: 'app',
+        computed: {
+            ...mapGetters([
+                'isLogin',
+                'showSignPopup',
+                'signType'
+            ])
+        },
+        components: {
+            formPopup
+        },
+        created() {
+            this._getUserInfo()
+        },
+        methods: {
+            shouldCheckLoigin(e) { // 全局的检查页面中需要登录才能执行的操作，如关注、收藏、评论等
+                let shouldLogin = e.target.getAttribute('data-shouldLogin') === 'true'
+                if (shouldLogin && !this.isLogin) {
+                    // 弹窗并阻止事件传播
+                    this.setSignPopup('signin')
+                    e.stopPropagation()
+                }
+            },
+            _getUserInfo() {
+                this.isLogin && getUserInfo()
+                    .then(({data}) => {
+                        if (data.code === ERR_OK) {
+                            this.setUserInfo(data.data)
+                        }
+                    })
+                    .catch(console.log)
+            },
+            ...mapMutations({
+                setUserInfo: 'SET_USER_INFO'
+            }),
+            ...mapActions([
+                'setSignPopup'
+            ])
+        }
+    }
+</script>
+
+<style lang="stylus">
+    #app
+        font-family: 'Avenir', Helvetica, Arial, sans-serif
+        -webkit-font-smoothing: antialiased
+        -moz-osx-font-smoothing: grayscale
+        color: #2c3e50
+
+</style>
