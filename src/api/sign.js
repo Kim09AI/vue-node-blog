@@ -21,8 +21,9 @@ export function submit(name, password, repassword, type = 'signin') {
     }
 }
 
-export function githubLogin() {
+export function githubLogin(redirect) {
     let url = isDev ? 'http://localhost:3000/api/signin/github' : '/api/signin/github'
+    url = redirect ? `${url}?redirect=${redirect}` : url
     window.location.href = url
 }
 

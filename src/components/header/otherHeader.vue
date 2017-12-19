@@ -37,22 +37,25 @@
             position fixed
             top 0
             left 0
-            width 100%
+            right 0
             height height
             background-color #ffffff
             z-index 10
             padding 0 10px
             box-sizing border-box
             box-shadow 0 0 2px #a0a0a0
-            display flex
-            align-items center
-            justify-content center
             .title
                 font-size 16px
                 color #222222
+                position absolute
+                top 50%
+                left 50%
+                transform translate(-50%, -50%)
             .back-icon
                 position absolute
                 left 20px
+                top 50%
+                transform translateY(-50%)
                 font-size 20px
                 color #999999
 </style>

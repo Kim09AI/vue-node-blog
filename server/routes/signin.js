@@ -52,12 +52,15 @@ let tokenUrl = 'https://github.com/login/oauth/access_token'
 let userinfoUrl = 'https://api.github.com/user'
 
 router.get('/github', (req, res, next) => {
-    let url = loginUrl + '?' + queryStr({client_id: config.client_id, scope: config.scope, state: new Date().valueOf()})
+    let redirect = req.query.redirect
+    let url = loginUrl + '?' + queryStr({client_id: config.client_id, scope: config.scope, state: redirect})
     res.redirect(url)
 })
 
 router.get('/github/oauth/callback', (req, res, next) => {
     let code = req.query.code
+    let redirect = req.query.state
+    let redirectUrl = redirect ? `${config.homeUrl}?redirect=${redirect}` : config.homeUrl
 
     let data = {
         client_id: config.client_id,
@@ -95,12 +98,12 @@ router.get('/github/oauth/callback', (req, res, next) => {
             }
 
             req.session.user = user
-            res.redirect(config.homeUrl)
+            res.redirect(redirectUrl)
         })
         .then((data) => {
             if (data) {
                 req.session.user = data.ops[0]
-                res.redirect(config.homeUrl)
+                res.redirect(redirectUrl)
             }
         })
         .catch(next)

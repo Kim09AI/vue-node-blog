@@ -5,9 +5,9 @@
             <span class="btn" @click="signin">登录</span>
             <span class="btn" @click="signup">注册</span>
         </div>
-        <div class="user-wrapper" v-else>
+        <div class="user-wrapper" v-else-if="user">
             <span class="avatar" v-if="user.avatar" :style="{'background-image': `url(${user.avatar})`}"></span>
-            <i class="iconfont icon">&#xe603;</i>
+            <i class="iconfont icon" v-else>&#xe603;</i>
             <div class="user">
                 <span class="name">{{user.originName || user.name}}</span>
                 <p class="describe">{{user.describe || describe}}</p>
@@ -88,7 +88,6 @@
                     .then(({data}) => {
                         if (data.code === ERR_OK) {
                             this.saveUserInfo({user: null, loginState: false})
-                            console.log(this.isLogin)
                             this.$router.push('/')
                         }
                     })

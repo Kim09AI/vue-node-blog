@@ -23,7 +23,7 @@ axios.interceptors.response.use(function(response) {
         }
     }
     return response
-},function(error) {
+}, function(error) {
     //对返回的错误进行一些处理
     return Promise.reject(error)
 })

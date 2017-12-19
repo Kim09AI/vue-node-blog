@@ -57,7 +57,8 @@ router.beforeEach((to, from, next) => {
     if (shouldLogin && !isLogin) {
         store.dispatch('setSignPopup', 'signin')
         next({
-            path: from.fullPath
+            path: from.fullPath,
+            query: {redirect: to.fullPath}
         })
     } else {
         next()
@@ -156,7 +157,7 @@ exports.bcryptCompare = function(password, hash) {
 export const pullupMixin = {
     data() {
         return {
-            pullupFunc: function() {}
+            pullupFunc: null
         }
     },
     methods: {
@@ -169,9 +170,15 @@ export const pullupMixin = {
             window.addEventListener('scroll', this.pullupFunc)
         }
     },
+    activated() {
+        this.pullupFunc && window.addEventListener('scroll', this.pullupFunc)
+    },
+    deactivated() {
+        this.pullupFunc && window.removeEventListener('scroll', this.pullupFunc)
+    },
     beforeDestroy() {
         // 解绑事件
-        window.removeEventListener('scroll', this.pullupFunc)
+        this.pullupFunc && window.removeEventListener('scroll', this.pullupFunc)
     }
 }
 
@@ -213,20 +220,20 @@ function getPostById(postId, type = 'entryView') {
 
 // 以async await + promise的方式，一篇一篇文章的获取
 await new Promise((resolve, reject) => {
-        (async function next(i, len) {
-            if (i < len) {
-                let post = postList[i]
-                let content = await getPostById(post.postId)
-                if (typeof content === 'string') {
-                    post.content = content
-                }
-                await sleep(100)
-                next(++i, len)
-            } else {
-                resolve()
+    (async function next(i, len) {
+        if (i < len) {
+            let post = postList[i]
+            let content = await getPostById(post.postId)
+            if (typeof content === 'string') {
+                post.content = content
             }
-        })(0, postList.length)
-    })
+            await sleep(100)
+            next(++i, len)
+        } else {
+            resolve()
+        }
+    })(0, postList.length)
+})
 ```
 
 ## Build Setup

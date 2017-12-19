@@ -10,7 +10,7 @@
                 <span class="text" @click="signup">注册</span>
             </div>
             <div class="right" v-else>
-                <span class="avatar" v-if="user.avatar" :style="{'background-image': user.avatar}" @click="avatarClick"></span>
+                <span class="avatar" v-if="user && user.avatar" :style="{'background-image': user.avatar}" @click="avatarClick"></span>
                 <i class="iconfont icon" v-else @click="avatarClick">&#xe603;</i>
             </div>
         </div>

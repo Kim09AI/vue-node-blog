@@ -125,10 +125,15 @@
 
                         if (data.code === ERR_OK) {
                             if (this.currentType === 'signin') {
-                                // this.saveUserInfo({user: data.data, loginState: true})
-                                this.close()
-                                // 刷新页面
-                                window.location.reload()
+                                let redirect = this.$route.query.redirect
+                                if (redirect) {
+                                    this.saveUserInfo({user: data.data, loginState: true})
+                                    this.$router.push(redirect)
+                                } else {
+                                    this.close()
+                                    // 刷新页面
+                                    window.location.reload()
+                                }
                             } else {
                                 this.currentType = 'signin'
                             }
@@ -145,7 +150,8 @@
                 this.currentType = this.currentType === 'signin' ? 'signup' : 'signin'
             },
             _githubLogin() {
-                githubLogin()
+                let redirect = this.$route.query.redirect
+                githubLogin(redirect)
             },
             close() {
                 this.coverClickHide && this.setSignPopup()

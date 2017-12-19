@@ -21,6 +21,13 @@ Vue.use(Router)
 
 const router =  new Router({
     mode: 'history',
+    scrollBehavior(to, from, savedPosition) {
+        if (savedPosition) {
+            return savedPosition
+        } else {
+            return {x: 0, y: 0}
+        }
+    },
     routes: [
         {
             path: '/',
@@ -145,7 +152,8 @@ router.beforeEach((to, from, next) => {
     if (shouldLogin && !isLogin) {
         store.dispatch('setSignPopup', 'signin')
         next({
-            path: from.fullPath
+            path: from.fullPath,
+            query: {redirect: to.fullPath}
         })
     } else {
         next()

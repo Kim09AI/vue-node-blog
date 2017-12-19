@@ -17,6 +17,12 @@ export function queryStr(data) {
     return str.substr(1)
 }
 
+export function queryByKey(key){
+    let result = window.location.search.match(new RegExp(key + "=[^\?\&]+", "g"))
+    let value = result ? result[0].split('=')[1] : ''
+    return decodeURIComponent(value)
+}
+
 const timeFormatArr = [0, 60, 3600, 86400, 2592000, 946080000, Number.MAX_VALUE]
 const timeUnit = ['刚刚', '分钟前', '小时前', '天前', '月前', '年前']
 

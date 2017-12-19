@@ -2,9 +2,9 @@
     <div id="app" @click.capture="shouldCheckLoigin">
         <div>
             <router-view name="header" />
-            <keep-alive>
+            <!-- <keep-alive> -->
                 <router-view/>
-            </keep-alive>
+            <!-- </keep-alive> -->
             <router-view name="footer" />
             <form-popup v-if="!isLogin && showSignPopup" :type="signType"></form-popup>
         </div>
@@ -15,7 +15,7 @@
     import {mapGetters, mapMutations, mapActions} from 'vuex'
     import formPopup from './components/formPopup/formPopup.vue'
     import {getUserInfo} from './api/user'
-    import {ERR_OK} from './common/js/util'
+    import {ERR_OK, queryByKey} from './common/js/util'
 
     export default {
         name: 'app',
@@ -31,8 +31,13 @@
         },
         created() {
             this._getUserInfo()
+            this.redirect()
         },
         methods: {
+            redirect() {
+                let redirect = queryByKey('redirect')
+                redirect && this.$router.push(decodeURIComponent(redirect))
+            },
             shouldCheckLoigin(e) { // 全局的检查页面中需要登录才能执行的操作，如关注、收藏、评论等
                 let shouldLogin = e.target.getAttribute('data-shouldLogin') === 'true'
                 if (shouldLogin && !this.isLogin) {

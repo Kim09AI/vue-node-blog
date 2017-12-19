@@ -27,7 +27,7 @@ async function getCategoryPost({category, limit = 50}) {
     let postList = []
     entrylist.forEach((item, index) => {
         // 跳过不是掘金本站的文章
-        if (!item.original) return 
+        if (!item.original) return
         let {title, originalUrl, tags, category, viewsCount} = item
         let postId = originalUrl.split('/')[4]
         // console.log(`postId: ${postId}`)
@@ -114,7 +114,7 @@ categoryArr.forEach(async (item) => {
 
     console.log(_postList.length)
 
-    // await PostModel.create(_postList)
+    await PostModel.create(_postList)
 
     console.log(`${_postList[0].category}: 批量创建成功`)
 

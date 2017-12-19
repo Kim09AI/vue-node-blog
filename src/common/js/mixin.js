@@ -4,7 +4,7 @@ import {debounce, checkScrollToBottom, timeFormat} from './util'
 export const pullupMixin = {
     data() {
         return {
-            pullupFunc: function() {}
+            pullupFunc: null
         }
     },
     methods: {
@@ -17,9 +17,15 @@ export const pullupMixin = {
             window.addEventListener('scroll', this.pullupFunc)
         }
     },
+    activated() {
+        this.pullupFunc && window.addEventListener('scroll', this.pullupFunc)
+    },
+    deactivated() {
+        this.pullupFunc && window.removeEventListener('scroll', this.pullupFunc)
+    },
     beforeDestroy() {
         // 解绑事件
-        window.removeEventListener('scroll', this.pullupFunc)
+        this.pullupFunc && window.removeEventListener('scroll', this.pullupFunc)
     }
 }
 
