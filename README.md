@@ -21,11 +21,38 @@ vue、vue-router、vuex、stylus、ES6、nodejs、express、mongodb、Ajax使用
 在项目根目录 `npm run build`
 启动mongodb再进入server运行 `npm run pro`
 
+#### 目录结构
+```js
+vue-node-blog
+├─src
+|  ├─App.vue
+|  ├─main.js
+|  ├─store
+|  ├─router
+|  ├─components // 业务组件
+|  ├─common // js、css等
+|  ├─base // 与业务不相关的组件
+|  ├─assets
+|  ├─api // 前端获取数据的接口
+├─server
+|   ├─index.js // 主程序
+|   ├─package.json
+|   ├─routes // 路由文件
+|   ├─public // 静态资源
+|   ├─models // 存放操作数据库的文件
+|   ├─middlewares // 中间件
+|   ├─logs
+|   ├─lib
+|   ├─grabData // 文章抓取程序
+|   ├─config // server配置文件
+
+```
+
 ```js
 // 开发环境使用cors跨域
 if (isDev) {
     app.all('*', function(req, res, next) {
-        res.header("Access-Control-Allow-Origin", "http://localhost:8080")
+        res.header("Access-Control-Allow-Origin", config.homeUrl)
         res.header("Access-Control-Allow-Credentials", true) // 携带cookie
         res.header("Access-Control-Allow-Headers", "Content-Type,Content-Length, Authorization, Accept,X-Requested-With")
         res.header("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS")
@@ -80,7 +107,7 @@ shouldCheckLoigin(e) { // 全局的检查页面中需要登录才能执行的操
 
 #### 两个异步请求同时发的时候有一个404了
 ```js
-// 在开发环境下，刚开始只是获取文章和评论，两个请求同时发，结果有一个404了，都是这个错误Can't set headers after they are sent.,生产环境也一样，只不过有时候状态码是200，一会是404
+// 刚开始只是获取文章和评论，两个请求同时发，结果有一个404了，生产环境下有时候状态码是200，一会是404,都是这个错误Can't set headers after they are sent.
 // 百度了一般都是重复响应res.send()，但是我的代码好像也找不到哪里有重复发，实在找不到了向大家请教
 // 一个请求一个请求的发是可以的，所以最后才改成了这样promise链式调用的方法
 getPostById(this.postId)
@@ -114,6 +141,10 @@ getPostById(this.postId)
             console.log(err)
         }
     })
+
+// 按照上面的方式，开发环境是正常的，一切到生产环境，就很容易出现这个错误Can't set headers after they are sent.
+// 有时候是失败，有时候是收到index.html
+// 实在找不到原因了，求助各位大佬，感激不尽！
 ```
 
 #### 密码处理

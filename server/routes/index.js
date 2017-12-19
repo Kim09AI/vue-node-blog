@@ -36,7 +36,7 @@ module.exports = function(app) {
         })
     } else {
         // 生产环境配合vue-router使用history模式
-        app.all('*', (req, res, next) => {
+        app.use('*', (req, res, next) => {
             if (!res.headersSent) {
                 res.sendFile(path.join(__dirname, '../../dist/index.html'))
             }

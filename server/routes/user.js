@@ -13,29 +13,29 @@ router.post('/getUserInfo', checkLogin, (req, res, next) => {
     })
 })
 
-router.post('/edit', checkLogin, (req, res, next) => {
-    let name = req.fields.name
-    let describe = req.fields.describe
-    let email = req.fields.email
-    let pattern = /^[\w\d_-]+@[\w\d]{2,4}(.[\w\d]{2,4})+$/
-    console.log(req.files)
+// router.post('/edit', checkLogin, (req, res, next) => {
+//     let name = req.fields.name
+//     let describe = req.fields.describe
+//     let email = req.fields.email
+//     let pattern = /^[\w\d_-]+@[\w\d]{2,4}(.[\w\d]{2,4})+$/
+//     console.log(req.files)
 
-    let msg
-    if (!msg && name.length < 1 || name.length > 10) {
-        msg = '名字请限制在 1-10 个字符'
-    }
+//     let msg
+//     if (!msg && name.length < 1 || name.length > 10) {
+//         msg = '名字请限制在 1-10 个字符'
+//     }
 
-    if (!msg && email && pattern.test(email)) {
-        msg = '邮箱格式不正确'
-    }
+//     if (!msg && email && pattern.test(email)) {
+//         msg = '邮箱格式不正确'
+//     }
 
-    if (msg) {
-        return res.send({
-            code: fail,
-            data: [],
-            msg
-        })
-    }
-})
+//     if (msg) {
+//         return res.send({
+//             code: fail,
+//             data: [],
+//             msg
+//         })
+//     }
+// })
 
 module.exports = router
