@@ -11,7 +11,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "supervisor index.js",
     "start": "NODE_ENV=production pm2 start index.js --name 'vue-node-blog'",
-    "pro": "cross-env NODE_ENV=production supervisor index"
+    "pro": "cross-env NODE_ENV=production supervisor index",
+    "heroku": "NODE_ENV=production node index"
   },
   "author": "",
   "license": "ISC",

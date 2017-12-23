@@ -12,6 +12,7 @@ vue、vue-router、vuex、stylus、ES6、nodejs、express、mongodb、Ajax使用
 
 ### 运行
 #### 开发模式
+需安装supervisor和cross-env
 在项目根目录 `npm install`
 进入server `npm install`
 启动mongodb再进入server运行 `npm run dev`
@@ -97,6 +98,42 @@ shouldCheckLoigin(e) { // 全局的检查页面中需要登录才能执行的操
         e.stopPropagation()
     }
 },
+```
+
+#### 使用keep-alive时的数据获取
+```js
+// 检测浏览器的前进后退
+// 因为使用了keep-alive,会缓存组件在内存中，重新进入时可以在activated中获取
+// 但是前进后退时不想获取数据，点击时才需要
+// 通过提交mutations来保存是否是前进后退
+window.addEventListener('popstate', () => {
+    this.setPopState(true)
+})
+
+// 进入子组件是会根据isPopState判断是否需要重新获取数据，intoPageCount判断是否是首次进入组件，初始为0
+activated() {
+    if (this.isPopState || !this.intoPageCount++) return
+
+    // 获取数据
+    ...
+}
+
+// 执行完activated应该重置isPopState,不然点击的时候isPopState还是true
+// 通过在app.vue根组件watch $route
+// 因为$route先于子组件的activated执行，通过setTimeout设成异步执行，就可以在activated后执行了
+watch: {
+    '$route'() {
+        if (this.isPopState) {
+            // 在同步代码后执行，即组件的activated后面，等待activated判断完成，重置isPopState
+            setTimeout(() => {
+                this.setPopState(false)
+            }, 0)
+            return
+        }
+        document.body.scrollTop = 0
+        document.documentElement.scrollTop = 0
+    }
+}
 ```
 
 #### 两个异步请求同时发的时候有一个404了
