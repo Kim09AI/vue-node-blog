@@ -104,9 +104,21 @@
         mounted() {
             this.tip = this.$refs.tip
         },
+        activated() {
+            if (this.isPopState || !this.intoPageCount++) return
+
+            this.commentId = this.$route.params.commentId
+            this.comment = {}
+            this.levelCommentList = []
+            this.tipText = ''
+            this.page = 1
+            this.hasMore = true
+            this._getCommentById()
+        },
         computed: {
             ...mapGetters([
-                'user'
+                'user',
+                'isPopState'
             ])
         },
         components: {

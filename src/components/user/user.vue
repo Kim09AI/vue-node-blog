@@ -6,7 +6,7 @@
             <span class="btn" @click="signup">注册</span>
         </div>
         <div class="user-wrapper" v-else-if="user">
-            <span class="avatar" v-if="user.avatar" :style="{'background-image': `url(${user.avatar})`}"></span>
+            <span class="avatar" v-if="user.avatar" :style="{'background-image': `url(${static}/img/${user.avatar})`}"></span>
             <i class="iconfont icon" v-else>&#xe603;</i>
             <div class="user">
                 <span class="name">{{user.originName || user.name}}</span>
@@ -30,21 +30,18 @@
     import {mapGetters, mapActions} from 'vuex'
     import OtherHeader from '../header/otherHeader'
     import {signout} from '../../api/sign'
-    import {ERR_OK} from '../../common/js/util'
+    import {ERR_OK, isDev} from '../../common/js/util'
 
     export default {
         name: 'user',
         data() {
             return {
+                static: isDev ? 'http://localhost:3000' : '',
                 title: '用户中心',
                 showBackBtn: false,
                 baseUrl: '/user',
                 describe: '这个人很懒,什么也没有留下!',
                 list: [{
-                    icon: '&#xe6a8;',
-                    text: '个人资料',
-                    url: ''
-                },{
                     icon: '&#xe651;',
                     text: '修改个人资料',
                     url: '/edit'
@@ -135,6 +132,8 @@
             background-repeat no-repeat
             background-size cover
             background-position center
+            margin-right 10px
+            border-radius 50%
         .icon
             font-size 60px
             color #cccccc

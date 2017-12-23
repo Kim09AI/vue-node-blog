@@ -45,4 +45,5 @@
         background-color #cccccc
         font-size 14px
         z-index 200
+        white-space nowrap
 </style>

@@ -6,6 +6,7 @@
 </template>
 
 <script>
+    import {mapGetters} from 'vuex'
     import OtherHeader from '../header/otherHeader'
     import PostList from '../post/postList'
     import {getPostHistory, delHistoryById} from '../../api/postHistory'
@@ -61,8 +62,21 @@
         },
         created() {
             this._getPostHistory()
-
+            
             this.pullup(this._getPostHistory)
+        },
+        activated() {
+            if (this.isPopState || !this.intoPageCount++) return
+
+            this.page = 1
+            this.hasMore = true
+            this.list = []
+            this._getPostHistory()
+        },
+        computed: {
+            ...mapGetters([
+                'isPopState'
+            ])
         },
         components: {
             OtherHeader,

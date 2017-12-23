@@ -6,6 +6,7 @@
 </template>
 
 <script>
+    import {mapGetters} from 'vuex'
     import OtherHeader from '../header/otherHeader'
     import PostList from '../post/postList'
     import {ERR_OK} from '../../common/js/util'
@@ -64,6 +65,19 @@
             this._getUserPostCollection()
 
             this.pullup(this._getUserPostCollection)
+        },
+        activated() {
+            if (this.isPopState || !this.intoPageCount++) return
+
+            this.list =  []
+            this.page =  1
+            this.hasMore =  true
+            this._getUserPostCollection()
+        },
+        computed: {
+            ...mapGetters([
+                'isPopState'
+            ])
         },
         components: {
             OtherHeader,

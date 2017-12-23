@@ -71,9 +71,21 @@
 
             this.pullup(this._getPosts)
         },
+        activated() {
+            if (this.isPopState || !this.intoPageCount++) return
+
+            this.title = this.$route.params.followAuthor ? '全部文章' : '我的文章'
+            this.list = []
+            this.page = 1
+            this.hasMore = true
+            this.showBtn = !this.$route.params.followAuthor
+            this.isSelf = !this.$route.params.followAuthor
+            this._getPosts()
+        },
         computed: {
             ...mapGetters([
-                'user'
+                'user',
+                'isPopState'
             ])
         },
         components: {

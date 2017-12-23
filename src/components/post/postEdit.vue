@@ -12,6 +12,7 @@
 </template>
 
 <script>
+    import {mapGetters} from 'vuex'
     import {create, getRawPost, updatePost} from '../../api/post'
     import {trim, ERR_OK} from '../../common/js/util'
     import Tip from '../../base/tip.vue'
@@ -124,8 +125,25 @@
         created() {
             this.isEdit && this._getRawPost()
         },
+        activated() {
+            if (this.isPopState || !this.intoPageCount++) return
+
+            this.title =  ''
+            this.content =  ''
+            this.tipText =  ''
+            this.category =  ''
+            this.tagsText =  ''
+            this.isEdit =  !!this.$route.params.postId
+            this.postId =  this.$route.params.postId
+            this.isEdit && this._getRawPost()
+        },
         mounted() {
             this.tip = this.$refs.tip
+        },
+        computed: {
+            ...mapGetters([
+                'isPopState'
+            ])
         },
         components: {
             Tip,

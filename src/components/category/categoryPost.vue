@@ -55,6 +55,22 @@
 
             this.pullup(this._getPostByCategory)
         },
+        activated() {
+            if (this.isPopState || !this.intoPageCount++) return
+
+            // 重置状态并获取数据
+            this.title = this.$route.params.category
+            this.category = this.$route.params.category
+            this.list = []
+            this.page = 1
+            this.hasMore = true
+            this._getPostByCategory()
+        },
+        computed: {
+            ...mapGetters([
+                'isPopState'
+            ])
+        },
         components: {
             OtherHeader,
             PostList

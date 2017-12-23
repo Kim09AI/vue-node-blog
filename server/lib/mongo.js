@@ -29,7 +29,16 @@ exports.User = mongolass.model('User', {
     originName: {
         type: 'string'
     },
+    avatar: {
+        type: 'string'
+    },
     password: {
+        type: 'string'
+    },
+    email: {
+        type: 'string'
+    },
+    describe: {
         type: 'string'
     },
     loginType: {
@@ -53,7 +62,7 @@ exports.Post = mongolass.model('Post', {
     content: {
         type: 'string'
     },
-    tags: {
+    tags: { // 这里有点奇怪，设成['string'], 'array'都不行，暂时没找到文档
         type: String
     },
     category: {

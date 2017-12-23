@@ -10,7 +10,7 @@
                 <span class="text" @click="signup">注册</span>
             </div>
             <div class="right" v-else>
-                <span class="avatar" v-if="user && user.avatar" :style="{'background-image': user.avatar}" @click="avatarClick"></span>
+                <span class="avatar" v-if="user && user.avatar" :style="{'background-image': `url(${static}/img/${user.avatar})`}" @click="avatarClick"></span>
                 <i class="iconfont icon" v-else @click="avatarClick">&#xe603;</i>
             </div>
         </div>
@@ -19,12 +19,14 @@
 
 <script>
     import {mapGetters, mapActions} from 'vuex'
+    import {isDev} from '../../common/js/util'
 
     export default {
         name: 'commonHeader',
         data() {
             return {
-                name: 'vue-node'
+                name: 'vue-node',
+                static: isDev ? 'http://localhost:3000' : '',
             }
         },
         methods: {

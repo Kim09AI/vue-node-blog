@@ -5,5 +5,9 @@ export function getUserInfo() {
 }
 
 export function editUserInfo(userInfo) {
-    return axios.post('user/edit', userInfo)
+    return axios.post('user/edit', userInfo, {
+        headers: {
+            'Content-Type': 'appliction/x-www-form-urlencoded'
+        }
+    })
 }

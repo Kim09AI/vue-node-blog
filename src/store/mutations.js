@@ -13,6 +13,9 @@ const mutations = {
     [types.SET_USER_INFO](state, user) {
         state.user = user
     },
+    [types.SET_POP_STATE](state, popState) {
+        state.isPopState = popState
+    }
 }
 
 export default mutations

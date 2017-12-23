@@ -255,6 +255,19 @@
         mounted() {
             this.tip = this.$refs.tip
         },
+        activated() {
+            if (this.isPopState || !this.intoPageCount++) return
+
+            this.post = {}
+            this.tipText = ''
+            this.commentList = []
+            this.userCommentLikeList = []
+            this.page = 1
+            this.hasMore = true
+            this.postId = this.$route.params.postId
+            this.isFollow = false
+            this._getPostInfo()
+        },
         computed: {
             isSelf() {
                 if (this.isLogin && this.user && this.post.author) {
@@ -267,7 +280,8 @@
             },
             ...mapGetters([
                 'user',
-                'isLogin'
+                'isLogin',
+                'isPopState'
             ])
         },
         components: {

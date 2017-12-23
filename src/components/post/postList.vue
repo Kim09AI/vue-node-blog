@@ -1,5 +1,5 @@
 <template>
-    <transition-group tag="div" name="slide-out">
+    <transition-group tag="div" :name="animateName">
         <div class="post" v-for="(item, index) in list" :key="item._id">
             <div class="title-wrapper">
                 <div class="post-info">
@@ -53,6 +53,11 @@
                 default: false
             }
         },
+        data() {
+            return {
+                animateName: 'slide-out'
+            }
+        },
         methods: {
             postClick(index) {
                 this.$emit('postClick', index)
@@ -65,6 +70,15 @@
             },
             collectionIndex(index) {
                 this.$emit('collectionIndex', index)
+            }
+        },
+        watch: {
+            list(newList) {
+                if (newList.length === 0) {
+                    this.animateName = ''
+                } else {
+                    this.animateName = 'slide-out'
+                }
             }
         }
     }

@@ -52,7 +52,7 @@ let tokenUrl = 'https://github.com/login/oauth/access_token'
 let userinfoUrl = 'https://api.github.com/user'
 
 router.get('/github', (req, res, next) => {
-    let redirect = req.query.redirect
+    let redirect = req.query.redirect || ''
     let url = loginUrl + '?' + queryStr({client_id: config.client_id, scope: config.scope, state: redirect})
     res.redirect(url)
 })

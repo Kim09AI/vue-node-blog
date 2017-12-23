@@ -9,6 +9,14 @@ import './common/stylus/index.styl'
 
 Vue.config.productionTip = false
 
+Vue.mixin({
+    data() {
+        return {
+            intoPageCount: 0, // 判断是否是首次进入页面，是则跳过activated
+        }
+    }
+})
+
 /* eslint-disable no-new */
 new Vue({
     el: '#app',

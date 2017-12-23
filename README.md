@@ -65,12 +65,6 @@ if (isDev) {
 }
 // 前端部分需要设置withCredentials为true才能传输cookie
 axios.defaults.withCredentials = true
-
-
-// 生产环境配合vue-router使用history模式
-app.use('*', (req, res, next) => {
-    res.sendFile(path.join(__dirname, '../../dist/index.html'))
-})
 ```
 
 #### 前端登录状态判断,需要登录才能进行的操作未登录就弹出登录弹窗
@@ -107,9 +101,8 @@ shouldCheckLoigin(e) { // 全局的检查页面中需要登录才能执行的操
 
 #### 两个异步请求同时发的时候有一个404了
 ```js
-// 刚开始只是获取文章和评论，两个请求同时发，结果有一个404了，生产环境下有时候状态码是200，一会是404,都是这个错误Can't set headers after they are sent.
-// 百度了一般都是重复响应res.send()，但是我的代码好像也找不到哪里有重复发，实在找不到了向大家请教
-// 一个请求一个请求的发是可以的，所以最后才改成了这样promise链式调用的方法
+// 刚开始只是获取文章和评论，两个请求同时发，结果有一个404了，一个请求一个请求的发是可以的
+// 暂时还没找到原因，就先改成这样promise链式调用的方法
 getPostById(this.postId)
     .then(({data}) => {
         if (data.code === ERR_OK) {
@@ -141,10 +134,6 @@ getPostById(this.postId)
             console.log(err)
         }
     })
-
-// 按照上面的方式，开发环境是正常的，一切到生产环境，就很容易出现这个错误Can't set headers after they are sent.
-// 有时候是失败，有时候是收到index.html
-// 实在找不到原因了，求助各位大佬，感激不尽！
 ```
 
 #### 密码处理

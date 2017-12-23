@@ -18,6 +18,7 @@
 </template>
 
 <script>
+    import {mapGetters} from 'vuex'
     import OtherHeader from '../header/otherHeader'
     import {ERR_OK} from '../../common/js/util'
     import {timeFormatMixin} from '../../common/js/mixin'
@@ -59,6 +60,17 @@
         },
         created() {
             this._getFollowAuthor()
+        },
+        activated() {
+            if (this.isPopState || !this.intoPageCount++) return
+
+            this.followAuthorList = []
+            this._getFollowAuthor()
+        },
+        computed: {
+            ...mapGetters([
+                'isPopState'
+            ])
         },
         components: {
             OtherHeader

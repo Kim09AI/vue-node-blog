@@ -6,6 +6,7 @@
 </template>
 
 <script>
+    import {mapGetters} from 'vuex'
     import PostList from '../post/postList.vue'
     import {getPosts} from '../../api/post'
     import {ERR_OK} from '../../common/js/util'
@@ -50,6 +51,21 @@
             this._getPosts()
 
             this.pullup(this._getPosts)
+        },
+        activated() {
+            // 前进后退或首次加载组件
+            if (this.isPopState || !this.intoPageCount++) return
+            
+            // 重置初始数据状态并获取数据
+            this.list = []
+            this.page = 1
+            this.hasMore = true
+            this._getPosts()
+        },
+        computed: {
+            ...mapGetters([
+                'isPopState'
+            ])
         },
         components: {
             PostList

@@ -203,6 +203,7 @@
                 margin-bottom 15px
                 box-shadow 0 0 1px #999999
                 outline none
+                border 1px solid #eeeeee
             .submit-btn
                 color #ffffff
                 font-size 14px
