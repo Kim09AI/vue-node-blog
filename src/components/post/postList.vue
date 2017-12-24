@@ -104,6 +104,7 @@
                     font-weight bold
                     height 1em
                     overflow hidden
+                    word-break break-all
                 .category
                     font-size 12px
                     color #cccccc
