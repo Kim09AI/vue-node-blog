@@ -126,6 +126,7 @@
             align-items center
             .text
                 margin-right 10px
+                white-space nowrap
             .file
                 flex 1
         .save-btn
