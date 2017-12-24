@@ -1,13 +1,11 @@
-const config = require('config-lite')
+const config = require('config-lite')(__dirname)
 const Mongolass = require('mongolass')
 const moment = require('moment')
 const objectIdToTimestamp = require('objectid-to-timestamp')
 
 const mongolass = new Mongolass()
 
-const mongodb = process.env.PROD_MONGODB || config.mongodb
-
-mongolass.connect(mongodb)
+mongolass.connect(config.mongodb)
 
 mongolass.plugin('addCreatedAt', {
     afterFind(results) {
