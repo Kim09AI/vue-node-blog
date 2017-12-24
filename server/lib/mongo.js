@@ -5,7 +5,9 @@ const objectIdToTimestamp = require('objectid-to-timestamp')
 
 const mongolass = new Mongolass()
 
-mongolass.connect(config.mongodb)
+const mongodb = process.env.PROD_MONGODB || config.mongodb
+
+mongolass.connect(mongodb)
 
 mongolass.plugin('addCreatedAt', {
     afterFind(results) {
