@@ -10,7 +10,7 @@ if (isDev) {
     axios.defaults.baseURL = '/api'
 }
 
-// axios.defaults.headers.post['Content-Type'] = 'appliction/x-www-form-urlencoded'
+axios.defaults.headers.post['Content-Type'] = 'appliction/x-www-form-urlencoded'
 
 //添加一个返回拦截器
 axios.interceptors.response.use(function(response) {

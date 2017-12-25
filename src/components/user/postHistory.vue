@@ -26,9 +26,10 @@
         },
         methods: {
             _getPostHistory() {
-                if (!this.hasMore) {
+                if (!this.hasMore || this.isGetDataNow) {
                     return
                 }
+                this.isGetDataNow = true
 
                 getPostHistory(this.page)
                     .then(({data}) => {
@@ -43,6 +44,7 @@
                         }
                     })
                     .catch(console.log)
+                    .finally(() => this.isGetDataNow = false)
             },
             _delHistoryById(index) {
                 let historyId = this.list[index]._id

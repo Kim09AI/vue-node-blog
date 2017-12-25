@@ -22,7 +22,7 @@ router.get('/', checkLogin, (req, res, next) => {
 
 router.post('/create', checkLogin, (req, res, next) => {
     let author = req.session.user._id
-    let postId = req.fields.postId
+    let postId = req.body.postId
 
     let data = {
         author,
@@ -42,7 +42,7 @@ router.post('/create', checkLogin, (req, res, next) => {
 
 router.post('/del', checkLogin, (req, res, next) => {
     let author = req.session.user._id
-    let postId = req.fields.postId
+    let postId = req.body.postId
 
     let data = {
         author,

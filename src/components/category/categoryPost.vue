@@ -32,9 +32,10 @@
                 this.$router.push(`/category/${this.category}/post/${postId}`)
             },
             _getPostByCategory() {
-                if (!this.hasMore) {
+                if (!this.hasMore || this.isGetDataNow) {
                     return
                 }
+                this.isGetDataNow = true
 
                 getPostByCategory(this.category, this.page)
                     .then(({data}) => {
@@ -48,6 +49,7 @@
                         }
                     })
                     .catch(console.log)
+                    .finally(() => this.isGetDataNow = false)
             }
         },
         created() {

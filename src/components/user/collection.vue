@@ -42,9 +42,10 @@
                     .catch(console.log)
             },
             _getUserPostCollection() {
-                if (!this.hasMore) {
+                if (!this.hasMore || this.isGetDataNow) {
                     return
                 }
+                this.isGetDataNow = true
 
                 getUserPostCollection(this.page)
                     .then(({data}) => {
@@ -59,6 +60,7 @@
                         }
                     })
                     .catch(console.log)
+                    .finally(() => this.isGetDataNow = false)
             }
         },
         created() {

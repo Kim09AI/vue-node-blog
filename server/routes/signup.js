@@ -4,9 +4,9 @@ const {getBcrypt} = require('../public/js/util')
 const {signupFail, success} = require('../public/js/code')
 
 router.post('/', (req, res, next) => {
-    let name = req.fields.name
-    let password = req.fields.password
-    let repassword = req.fields.repassword
+    let name = req.body.name
+    let password = req.body.password
+    let repassword = req.body.repassword
 
     let msg
     if (!msg && name.length < 1 || name.length > 10) {

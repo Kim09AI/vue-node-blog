@@ -25,9 +25,10 @@
         },
         methods: {
             _getPosts() {
-                if (!this.hasMore) {
+                if (!this.hasMore || this.isGetDataNow) {
                     return
                 }
+                this.isGetDataNow = true
 
                 getPosts(null, this.page)
                     .then(({data}) => {
@@ -41,6 +42,7 @@
                         }
                     })
                     .catch(console.log)
+                    .finally(() => this.isGetDataNow = false)
             },
             postClick(index) {
                 let postId = this.list[index]._id

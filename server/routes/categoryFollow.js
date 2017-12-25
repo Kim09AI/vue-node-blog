@@ -19,7 +19,7 @@ router.get('/', checkLogin, (req, res, next) => {
 })
 
 router.post('/create', checkLogin, (req, res, next) => {
-    let category = req.fields.category
+    let category = req.body.category
     let author = req.session.user._id
 
     let data = {
@@ -39,7 +39,7 @@ router.post('/create', checkLogin, (req, res, next) => {
 })
 
 router.post('/cancel', checkLogin, (req, res, next) => {
-    let category = req.fields.category
+    let category = req.body.category
     let author = req.session.user._id
 
     let data = {

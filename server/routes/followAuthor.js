@@ -21,7 +21,7 @@ router.get('/', checkLogin, (req, res, next) => {
 // 关注
 router.post('/create', checkLogin, (req, res, next) => {
     let author = req.session.user._id
-    let followAuthor = req.fields.followAuthor
+    let followAuthor = req.body.followAuthor
 
     let data = {
         author,
@@ -42,7 +42,7 @@ router.post('/create', checkLogin, (req, res, next) => {
 // 取消关注
 router.post('/del', checkLogin, (req, res, next) => {
     let author = req.session.user._id
-    let followAuthor = req.fields.followAuthor
+    let followAuthor = req.body.followAuthor
 
     let data = {
         author,

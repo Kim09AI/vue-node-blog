@@ -13,8 +13,8 @@ module.exports = {
         return PostCollection.find({author})
             .skip(start)
             .limit(limit)
-            .populate({path: 'author', select: {password: 0}, model: 'User'})
             .populate({path: 'postId', model: 'Post'})
+            .populate({path: 'postId.author', select: {password: 0}, model: 'User'})
             .addCreatedAt()
             .exec()
     },

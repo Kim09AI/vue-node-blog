@@ -37,8 +37,8 @@ router.get('/:commentId', (req, res, next) => {
 
 // 创建评论
 router.post('/create', checkLogin, (req, res, next) => {
-    let content = req.fields.content
-    let postId = req.fields.postId
+    let content = req.body.content
+    let postId = req.body.postId
     let author = req.session.user._id
 
     if (!content.length) {
@@ -69,7 +69,7 @@ router.post('/create', checkLogin, (req, res, next) => {
 // 删除一条评论
 router.post('/del', checkLogin, (req, res, next) => {
     let author = req.session.user._id
-    let commentId = req.fields.commentId
+    let commentId = req.body.commentId
 
     CommentModel.delCommentById(author, commentId)
         .then((data) => {

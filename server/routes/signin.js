@@ -7,8 +7,8 @@ const {loginFail, success, unLogin} = require('../public/js/code')
 const checkLogin = require('../middlewares/check').checkLogin
 
 router.post('/', (req, res, next) => {
-    let name = req.fields.name
-    let password = req.fields.password
+    let name = req.body.name
+    let password = req.body.password
 
     UserModel.getUserByName(name)
         .then((user) => {
@@ -18,7 +18,7 @@ router.post('/', (req, res, next) => {
                     data: [],
                     msg: '用户不存在'
                 })
-                return
+                throw new Error('user unExist')
             }
 
             return Promise.all([
@@ -43,7 +43,11 @@ router.post('/', (req, res, next) => {
                 })
             }
         })
-        .catch(next)
+        .catch((err) => {
+            if (err.message === 'user unExist') return
+
+            next(err)
+        })
 })
 
 

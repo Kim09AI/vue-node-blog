@@ -3,14 +3,17 @@ const express = require('express')
 const session = require('express-session')
 const MongoStore = require('connect-mongo')(session)
 const config = require('config-lite')(__dirname)
+const bodyParser = require('body-parser')
 const routes = require('./routes')
 const pkg = require('../package')
 const winston = require('winston')
 const expressWinston = require('express-winston')
-
 const serverErr = require('./public/js/code').serverErr
 
 const app = express()
+
+app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.json())
 
 // 隐藏 x-powered-by
 app.disable('x-powered-by')
@@ -50,11 +53,6 @@ app.use(session({
     store: new MongoStore({
         url: config.mongodb
     })
-}))
-
-app.use(require('express-formidable')({
-    uploadDir: path.join(__dirname, 'public/img'),
-    keepExtensions: true
 }))
 
 app.use(expressWinston.logger({

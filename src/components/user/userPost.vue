@@ -29,9 +29,10 @@
         },
         methods: {
             _getPosts() {
-                if (!this.hasMore) {
+                if (!this.hasMore || this.isGetDataNow) {
                     return
                 }
+                this.isGetDataNow = true
 
                 let author = this.isSelf ? this.user._id : this.$route.params.followAuthor
                 getPosts(author, this.page)
@@ -46,6 +47,7 @@
                         }
                     })
                     .catch(console.log)
+                    .finally(() => this.isGetDataNow = false)
             },
             _delPostById(index) {
                 let postId = this.list[index]._id

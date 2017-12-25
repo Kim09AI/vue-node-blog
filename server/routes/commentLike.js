@@ -21,8 +21,8 @@ router.get('/:postId', checkLogin, (req, res, next) => {
 
 router.post('/create', checkLogin, (req, res, next) => {
     let author = req.session.user._id
-    let postId = req.fields.postId
-    let commentId = req.fields.commentId
+    let postId = req.body.postId
+    let commentId = req.body.commentId
 
     const data = {
         author,
@@ -43,7 +43,7 @@ router.post('/create', checkLogin, (req, res, next) => {
 
 router.post('/del', checkLogin, (req, res, next) => {
     let author = req.session.user._id
-    let commentId = req.fields.commentId
+    let commentId = req.body.commentId
 
     const data = {
         author,

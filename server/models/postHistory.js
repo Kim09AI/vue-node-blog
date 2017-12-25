@@ -15,7 +15,7 @@ PostHistory.plugin('addCommentCount', {
 
 module.exports = {
     create: function create(history) {
-        return PostHistory.create(history)
+        return PostHistory.create(history).exec()
     },
     getHistoryByAuthor: function getHistoryByAuthor(author, page = 1, limit = 20) {
         let start = (page - 1) * 20
@@ -23,8 +23,8 @@ module.exports = {
         return PostHistory.find({author})
             .skip(start)
             .limit(limit)
-            .populate({path: 'author', select: {password: 0}, model: 'User'})
             .populate({path: 'postId', model: 'Post'})
+            .populate({path: 'postId.author', select: {password: 0}, model: 'User'})
             .addCreatedAt()
             .addCommentCount()
             .exec()

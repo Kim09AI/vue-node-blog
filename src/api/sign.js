@@ -29,7 +29,7 @@ export function githubLogin(redirect) {
 
 // 登出
 export function signout() {
-    return axios.post('signout')
+    return axios.get('signout')
 }
 
 export function getUserInfo() {

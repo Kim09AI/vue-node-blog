@@ -41,10 +41,10 @@ router.get('/category', (req, res, next) => {
 // 发表文章
 router.post('/create', checkLogin, (req, res, next) => {
     let author = req.session.user._id
-    let title = req.fields.title
-    let content = req.fields.content
-    let category = req.fields.category
-    let tags = req.fields.tags
+    let title = req.body.title
+    let content = req.body.content
+    let category = req.body.category
+    let tags = req.body.tags
 
     let msg
     if (!msg && !title.length) {
@@ -86,7 +86,7 @@ router.post('/create', checkLogin, (req, res, next) => {
 router.get('/:postId', (req, res, next) => {
     let postId = req.params.postId
     let author = req.session.user && req.session.user._id
-
+    
     Promise.all([
         PostModel.getPostById(postId),
         PostModel.incPv(postId)
@@ -142,12 +142,12 @@ router.get('/:postId/rawPost', checkLogin, (req, res, next) => {
 
 // 修改文章
 router.post('/:postId/edit', checkLogin, (req, res, next) => {
-    let title = req.fields.title
-    let content = req.fields.content
+    let title = req.body.title
+    let content = req.body.content
     let author = req.session.user._id
     let postId = req.params.postId
-    let category = req.fields.category
-    let tags = req.fields.tags
+    let category = req.body.category
+    let tags = req.body.tags
 
     let msg
     if (!msg && !title.length) {

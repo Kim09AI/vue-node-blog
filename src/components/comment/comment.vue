@@ -66,6 +66,9 @@
                     .catch(console.log)
             },
             _getCommentById() {
+                if (this.isGetDataNow) return
+                this.isGetDataNow = true
+                
                 getCommentById(this.commentId)
                     .then(({data}) => {
                         if (data.code === ERR_OK) {
@@ -76,6 +79,7 @@
                         this._getLevelComment()
                     })
                     .catch(console.log)
+                    .finally(() => this.isGetDataNow = false)
             },
             _getLevelComment() {
                 if (!this.hasMore) {

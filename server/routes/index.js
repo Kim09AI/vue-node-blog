@@ -3,6 +3,8 @@ const responseType = require('../middlewares/responseType')
 const path = require('path')
 const addApiPrefix = require('../public/js/util').addApiPrefix
 
+const isDev = process.env.NODE_ENV !== 'production'
+
 module.exports = function(app) {
     // 设置响应类型
     app.use(responseType)
@@ -21,14 +23,18 @@ module.exports = function(app) {
     app.use(addApiPrefix('/categoryFollow'), require('./categoryFollow'))
     app.use(addApiPrefix('/user'), require('./user'))
     
+    // if (!isDev) {
+    //     app.get('*', (req, res, next) => {
+    //         res.sendFile(path.join(__dirname, '../../dist/index.html'))
+    //     })
+    // }
+
     app.use((req, res, next) => {
-        if (!res.headersSent) {
-            res.status(404)
-            res.send({
-                code: unExist,
-                data: [],
-                msg: '资源不存在'
-            })
-        }
+        res.status(404)
+        res.send({
+            code: unExist,
+            data: [],
+            msg: '资源不存在'
+        })
     })
 }

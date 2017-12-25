@@ -3,7 +3,7 @@ const config = require('config-lite')(__dirname)
 const checkLogin = require('../middlewares/check').checkLogin
 const success = require('../public/js/code').success
 
-router.post('/', checkLogin, (req, res, next) => {
+router.get('/', checkLogin, (req, res, next) => {
     req.session.destroy()
     res.clearCookie(config.session.key)
     res.send({

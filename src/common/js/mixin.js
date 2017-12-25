@@ -49,7 +49,7 @@ export const postFormatMixin = {
 
             _list.forEach((item) => {
                 Object.keys(item.postId).forEach((key) => {
-                    if (key === '_id' || key === 'author') {
+                    if (key === '_id') {
                         return
                     }
                     item[key] = item.postId[key]

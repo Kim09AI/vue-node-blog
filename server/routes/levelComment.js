@@ -6,8 +6,8 @@ const checkLogin = require('../middlewares/check').checkLogin
 // 创建二级评论
 router.post('/create', checkLogin, (req, res, next) => {
     let author = req.session.user._id
-    let content = req.fields.content
-    let commentId = req.fields.commentId
+    let content = req.body.content
+    let commentId = req.body.commentId
 
     if (!content.length) {
         return res.send({
@@ -54,7 +54,7 @@ router.get('/', (req, res, next) => {
 // 删除一条二级评论
 router.post('/del', checkLogin, (req, res, next) => {
     let author = req.session.user._id
-    let levelCommentId = req.fields.levelCommentId
+    let levelCommentId = req.body.levelCommentId
 
     LevelCommentModel.delById(author, levelCommentId)
         .then((data) => {
