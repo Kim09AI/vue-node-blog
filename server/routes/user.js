@@ -16,8 +16,8 @@ router.post('/getUserInfo', checkLogin, (req, res, next) => {
     })
 })
 
-const upload = multer({dest: '../public/img'})
-router.post('/edit', checkLogin, upload.single('images'), (req, res, next) => {
+const upload = multer({dest: './public/img'})
+router.post('/edit', checkLogin, upload.single('avatar'), (req, res, next) => {
     let author = req.session.user._id
     let loginType = req.session.user.loginType
     let name = req.body.name
@@ -56,6 +56,10 @@ router.post('/edit', checkLogin, upload.single('images'), (req, res, next) => {
         userInfo.originName = name
     } else {
         userInfo.name = name
+    }
+
+    if (filePath) {
+        fs.renameSync(req.file.path, filePath)
     }
 
     UserModel.setUserInfo(author, userInfo)

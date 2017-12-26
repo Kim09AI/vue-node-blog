@@ -33,11 +33,6 @@
         created() {
             this._getUserInfo()
             this.redirect()
-
-            // 检测浏览器的前进后退，判断是否需要重新获取数据，false要获取，true不需要
-            window.addEventListener('popstate', () => {
-                this.setPopState(true)
-            })
         },
         methods: {
             redirect() {
@@ -78,8 +73,6 @@
                     }, 0)
                     return
                 }
-                document.body.scrollTop = 0
-                document.documentElement.scrollTop = 0
             }
         }
     }

@@ -19,7 +19,20 @@ const Edit = () => import('../components/user/edit')
 
 Vue.use(Router)
 
+// 检测浏览器的前进后退，判断是否需要重新获取数据，false要获取，true不需要
+window.addEventListener('popstate', () => {
+    store.commit('SET_POP_STATE', true)
+})
+
 const router =  new Router({
+    mode: 'history',
+    scrollBehavior(to, from, savedPosition) {
+        if (savedPosition) {
+            return savedPosition
+        } else {
+            return { x: 0, y: 0 }
+        }
+    },
     routes: [
         {
             path: '/',

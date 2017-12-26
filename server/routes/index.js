@@ -23,11 +23,12 @@ module.exports = function(app) {
     app.use(addApiPrefix('/categoryFollow'), require('./categoryFollow'))
     app.use(addApiPrefix('/user'), require('./user'))
     
-    // if (!isDev) {
-    //     app.get('*', (req, res, next) => {
-    //         res.sendFile(path.join(__dirname, '../../dist/index.html'))
-    //     })
-    // }
+    // 生产环境配合vue-router使用history模式
+    if (!isDev) {
+        app.get('*', (req, res, next) => {
+            res.sendFile(path.join(__dirname, '../../dist/index.html'))
+        })
+    }
 
     app.use((req, res, next) => {
         res.status(404)

@@ -71,30 +71,25 @@
                         }
                     })
                     .then(() => {
-                        return this._getComments()
+                        if (!this.isLogin) {
+                            return
+                        }
+                        
+                        this._getUserPostCollectionByPostId()
+                        this._getByFollowAuthor()
+                        this._getUserPostLikeByPostId()
                     })
+                    .catch(console.log)
+                
+                this._getComments()
                     .then(() => {
                         if (!this.isLogin) {
-                            // 没登录就跳过后面的then
-                            throw new Error('noLogin')
+                            return
                         }
 
-                        return this._getUserPostCollectionByPostId()
+                        this._getUserCommentLikeByPostId()
                     })
-                    .then(() => {
-                        return this._getByFollowAuthor()
-                    })
-                    .then(() => {
-                        return this._getUserPostLikeByPostId()
-                    })
-                    .then(() => {
-                        return this._getUserCommentLikeByPostId()
-                    })
-                    .catch((err) =>{
-                        if (err.message !== 'noLogin') {
-                            console.log(err)
-                        }
-                    })
+                    .catch(console.log)
             },
             checked(content) {
                 content = trim(content)
@@ -118,9 +113,10 @@
                     .catch(console.log)
             },
             _getComments() {
-                if (!this.hasMore) {
+                if (!this.hasMore || this.isGetDataNow) {
                     return
                 }
+                this.isGetDataNow = true
 
                 return getComments(this.postId, this.page)
                     .then(({data}) => {
@@ -133,23 +129,22 @@
                             }
                         }
                     })
+                    .finally(() => this.isGetDataNow = false)
             },
             _getUserCommentLikeByPostId() {
-                if (this.isLogin) {
-                    return getUserCommentLikeByPostId(this.postId)
-                        .then(({data}) => {
-                            if (data.code === ERR_OK) {
-                                this.userCommentLikeList = data.data.map((item) => {
-                                    return item.commentId
-                                })
-                                this.commentList = this.setCommentLikeState(this.commentList)
-                            }
-                        })
-                        .catch(console.log)
-                }
+                getUserCommentLikeByPostId(this.postId)
+                    .then(({data}) => {
+                        if (data.code === ERR_OK) {
+                            this.userCommentLikeList = data.data.map((item) => {
+                                return item.commentId
+                            })
+                            this.commentList = this.setCommentLikeState(this.commentList)
+                        }
+                    })
+                    .catch(console.log)
             },
             _getUserPostLikeByPostId() {
-                return getUserPostLikeByPostId(this.postId)
+                getUserPostLikeByPostId(this.postId)
                     .then(({data}) => {
                         if (data.code === ERR_OK) {
                             if (data.data.postId === this.postId) {
@@ -157,9 +152,10 @@
                             }
                         }
                     })
+                    .catch(console.log)
             },
             _getUserPostCollectionByPostId() {
-                return getUserPostCollectionByPostId(this.postId)
+                getUserPostCollectionByPostId(this.postId)
                     .then(({data}) => {
                         if (data.code === ERR_OK) {
                             if (data.data.postId === this.postId) {
@@ -167,9 +163,10 @@
                             }
                         }
                     })
+                    .catch(console.log)
             },
             _getByFollowAuthor() {
-                return getByFollowAuthor(this.post.author._id)
+                getByFollowAuthor(this.post.author._id)
                     .then(({data}) => {
                         if (data.code === ERR_OK) {
                             if (data.data.followAuthor === this.post.author._id) {
@@ -177,6 +174,7 @@
                             }
                         }
                     })
+                    .catch(console.log)
             },
             follow() {
                 let followFunc = this.isFollow ? followAuthorCancel : followAuthorCreate
