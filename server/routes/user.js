@@ -4,6 +4,7 @@ const {success, fail} = require('../public/js/code')
 const checkLogin = require('../middlewares/check').checkLogin
 const path = require('path')
 const fs = require('fs')
+const multer = require('multer')
 
 router.post('/getUserInfo', checkLogin, (req, res, next) => {
     let user = req.session.user
@@ -15,14 +16,15 @@ router.post('/getUserInfo', checkLogin, (req, res, next) => {
     })
 })
 
-router.post('/edit', checkLogin, (req, res, next) => {
+const upload = multer({dest: '../public/img'})
+router.post('/edit', checkLogin, upload.single('images'), (req, res, next) => {
     let author = req.session.user._id
     let loginType = req.session.user.loginType
     let name = req.body.name
     let describe = req.body.describe
     let email = req.body.email
     let pattern = /^[\w\d_-]+@[\w\d]{2,4}(.[\w\d]{2,4})+$/
-    let filePath = req.files.avatar && req.files.avatar.path
+    let filePath = req.file && `${req.file.path}.${req.file.originalname.split('.').pop()}`
     let avatar = filePath && filePath.split(path.sep).pop()
 
     let msg
