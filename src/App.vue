@@ -71,7 +71,6 @@
                     setTimeout(() => {
                         this.setPopState(false)
                     }, 0)
-                    return
                 }
             }
         }

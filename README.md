@@ -3,24 +3,32 @@
 > vue-node-blog
 
 ### 描述
-一个练手的vue+node的博客，实现的功能有: 发文章、修改文章、文章的喜欢及收藏、关注用户、评论及二级评论、评论点赞、历史记录、一些删除功能等，
-登录、注册，以及接入了github第三方登录，都是一些比较基础的功能，并抓取了一些掘金的文章，方便看效果
-第一次发的小项目，不足之处以及写的不好的地方，欢迎大家提出来！
+一个练手的vue+node的博客，实现的功能有: 发文章、修改文章、文章的喜欢及收藏、关注用户、评论及二级评论、评论点赞、历史记录、我的文章、修改个人资料、一些删除功能等，
+登录、注册，以及接入了github第三方登录，并抓取了一些掘金的文章，方便看效果
+第一次发的小项目，不足之处以及写的不好的地方，欢迎大家提出来！觉得好的话，也欢迎star!
+因为用是国外的服务，所以获取数据的时候慢一点也是正常的。<br>
+[线上地址: https://vue-node-blog.herokuapp.com](https://vue-node-blog.herokuapp.com)<br>
+[github地址: https://github.com/Kim09AI/vue-node-blog](https://github.com/Kim09AI/vue-node-blog)
 
 ### 技术栈
 vue、vue-router、vuex、stylus、ES6、nodejs、express、mongodb、Ajax使用axios（前后端共用）
 
 ### 运行
 #### 开发模式
-需安装supervisor和cross-env
+需全局安装supervisor和cross-env<br>
 在项目根目录 `npm install`
-进入server `npm install`
 启动mongodb再进入server运行 `npm run dev`
 然后在项目根目录运行 `npm run dev`
 
 #### 本地以生产模式运行
 在项目根目录 `npm run build`
-启动mongodb再进入server运行 `npm run pro`
+然后启动mongodb再进入server运行 `npm run pro`，
+`npm run pro`之前需要在`server/config`添加`production.js`,可参考如下配置,如需其他配置可自行配置
+```js
+module.exports = {
+    homeUrl: '/',
+}
+```
 
 #### 目录结构
 ```js
@@ -66,6 +74,13 @@ if (isDev) {
 }
 // 前端部分需要设置withCredentials为true才能传输cookie
 axios.defaults.withCredentials = true
+
+// 生产环境配合vue-router使用history模式
+if (!isDev) {
+    app.get('*', (req, res, next) => {
+        res.sendFile(path.join(__dirname, '../../dist/index.html'))
+    })
+}
 ```
 
 #### 前端登录状态判断,需要登录才能进行的操作未登录就弹出登录弹窗
@@ -103,11 +118,14 @@ shouldCheckLoigin(e) { // 全局的检查页面中需要登录才能执行的操
 #### 使用keep-alive时的数据获取
 ```js
 // 检测浏览器的前进后退
-// 因为使用了keep-alive,会缓存组件在内存中，重新进入时可以在activated中获取
-// 但是前进后退时不想获取数据，点击时才需要
+// 因为使用了keep-alive,会缓存组件在内存中，重新进入时可以在activated中获取数据
+// 但是前进后退时我不想获取数据，点击时才需要
 // 通过提交mutations来保存是否是前进后退
+// 原本是打算在app.vue根组件的created绑定popstate事件，但是vue-router内部也绑定了popstate事件，也就是说vue-router绑定的事件会先执行
+// 执行顺序就会是这样 vue-router的popstate ==> 根组件watch $route ==> 子组件的activated ==> 我绑定的popstate,子组件的activated都已经执行了，那我提交的mutations就没有意义了
+// 所以需要在new Router({}) 前绑定
 window.addEventListener('popstate', () => {
-    this.setPopState(true)
+    store.commit('SET_POP_STATE', true)
 })
 
 // 进入子组件是会根据isPopState判断是否需要重新获取数据，intoPageCount判断是否是首次进入组件，初始为0
@@ -128,49 +146,9 @@ watch: {
             setTimeout(() => {
                 this.setPopState(false)
             }, 0)
-            return
         }
-        document.body.scrollTop = 0
-        document.documentElement.scrollTop = 0
     }
 }
-```
-
-#### 两个异步请求同时发的时候有一个404了
-```js
-// 刚开始只是获取文章和评论，两个请求同时发，结果有一个404了，一个请求一个请求的发是可以的
-// 暂时还没找到原因，就先改成这样promise链式调用的方法
-getPostById(this.postId)
-    .then(({data}) => {
-        if (data.code === ERR_OK) {
-            this.post = data.data
-        }
-    })
-    .then(() => {
-        return this._getComments()
-    })
-    .then(() => {
-        if (!this.isLogin) {
-            // 没登录就跳过后面的then
-            throw new Error('noLogin')
-        }
-
-        return this._getUserPostCollectionByPostId()
-    })
-    .then(() => {
-        return this._getByFollowAuthor()
-    })
-    .then(() => {
-        return this._getUserPostLikeByPostId()
-    })
-    .then(() => {
-        return this._getUserCommentLikeByPostId()
-    })
-    .catch((err) =>{
-        if (err.message !== 'noLogin') {
-            console.log(err)
-        }
-    })
 ```
 
 #### 密码处理
