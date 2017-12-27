@@ -9,6 +9,7 @@ module.exports = function(app) {
     // 设置响应类型
     app.use(responseType)
 
+    // addApiPrefix添加/api，主要是在history模式下，避免前后端路由冲突
     app.use(addApiPrefix('/signin'), require('./signin'))
     app.use(addApiPrefix('/signup'), require('./signup'))
     app.use(addApiPrefix('/signout'), require('./signout'))

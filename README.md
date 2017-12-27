@@ -5,8 +5,8 @@
 ### 描述
 一个练手的vue+node的博客，实现的功能有: 发文章、修改文章、文章的喜欢及收藏、关注用户、评论及二级评论、评论点赞、历史记录、我的文章、修改个人资料、一些删除功能等，
 登录、注册，以及接入了github第三方登录，并抓取了一些掘金的文章，方便看效果
-第一次发的小项目，不足之处以及写的不好的地方，欢迎大家提出来！觉得好的话，也欢迎star!
-因为用是国外的服务，所以获取数据的时候慢一点也是正常的。<br>
+第一次发的小项目，不足之处以及写的不好的地方，欢迎大家提出来，一起交流！觉得好的话，也欢迎star!<br>
+因为用是国外的服务，所以获取数据的时会慢一点。<br>
 [线上地址: https://vue-node-blog.herokuapp.com](https://vue-node-blog.herokuapp.com)<br>
 [github地址: https://github.com/Kim09AI/vue-node-blog](https://github.com/Kim09AI/vue-node-blog)
 
@@ -227,6 +227,27 @@ export const timeFormatMixin = {
             })
         }
     }
+}
+
+// 格式化代码
+const timeFormatArr = [0, 60, 3600, 86400, 2592000, 946080000, Number.MAX_VALUE]
+const timeUnit = ['刚刚', '分钟前', '小时前', '天前', '月前', '年前']
+
+export function timeFormat(dateStr) {
+    let dateTime = new Date(dateStr).getTime()
+    let now = new Date().getTime()
+    let time = (now - dateTime) / 1000
+
+    let index = timeFormatArr.findIndex((item, index) => {
+        return item <= time && timeFormatArr[index + 1] > time
+    })
+
+    if (index === 0) {
+        return timeUnit[0]
+    }
+
+    time = time / timeFormatArr[index] | 0
+    return time + timeUnit[index]
 }
 ```
 
